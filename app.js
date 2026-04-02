@@ -66,10 +66,16 @@ const recipes = [
     }
 ];
 
-// Select container
-const recipeContainer = document.querySelector('#recipe-container');
+// State management
+let currentFilter = 'all';
+let currentSort = 'none';
 
-// Create one recipe card
+// DOM Selection
+const recipeContainer = document.querySelector('#recipe-container');
+const filterButtons = document.querySelectorAll('[data-filter]');
+const sortButtons = document.querySelectorAll('[data-sort]');
+
+// Function to create HTML for a single recipe card
 const createRecipeCard = (recipe) => {
     return `
         <div class="recipe-card" data-id="${recipe.id}">
@@ -83,7 +89,7 @@ const createRecipeCard = (recipe) => {
     `;
 };
 
-// Render all recipes
+// Function to render recipes to the DOM
 const renderRecipes = (recipesToRender) => {
     const recipeCardsHTML = recipesToRender
         .map(createRecipeCard)
@@ -92,5 +98,104 @@ const renderRecipes = (recipesToRender) => {
     recipeContainer.innerHTML = recipeCardsHTML;
 };
 
+// Pure filter functions
+const filterByDifficulty = (recipesArray, difficulty) => {
+    return recipesArray.filter(recipe => recipe.difficulty === difficulty);
+};
+
+const filterByTime = (recipesArray, maxTime) => {
+    return recipesArray.filter(recipe => recipe.time < maxTime);
+};
+
+const applyFilter = (recipesArray, filterType) => {
+    switch (filterType) {
+        case 'easy':
+            return filterByDifficulty(recipesArray, 'easy');
+        case 'medium':
+            return filterByDifficulty(recipesArray, 'medium');
+        case 'hard':
+            return filterByDifficulty(recipesArray, 'hard');
+        case 'quick':
+            return filterByTime(recipesArray, 30);
+        case 'all':
+        default:
+            return recipesArray;
+    }
+};
+
+// Pure sort functions
+const sortByName = (recipesArray) => {
+    return [...recipesArray].sort((a, b) => a.title.localeCompare(b.title));
+};
+
+const sortByTime = (recipesArray) => {
+    return [...recipesArray].sort((a, b) => a.time - b.time);
+};
+
+const applySort = (recipesArray, sortType) => {
+    switch (sortType) {
+        case 'name':
+            return sortByName(recipesArray);
+        case 'time':
+            return sortByTime(recipesArray);
+        case 'none':
+        default:
+            return recipesArray;
+    }
+};
+
+// Update active button states
+const updateActiveButtons = () => {
+    filterButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.filter === currentFilter) {
+            btn.classList.add('active');
+        }
+    });
+
+    sortButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.sort === currentSort) {
+            btn.classList.add('active');
+        }
+    });
+};
+
+// Main update function
+const updateDisplay = () => {
+    let recipesToDisplay = recipes;
+
+    recipesToDisplay = applyFilter(recipesToDisplay, currentFilter);
+    recipesToDisplay = applySort(recipesToDisplay, currentSort);
+
+    renderRecipes(recipesToDisplay);
+    updateActiveButtons();
+
+    console.log(`Displaying ${recipesToDisplay.length} recipes (Filter: ${currentFilter}, Sort: ${currentSort})`);
+};
+
+// Event handlers
+const handleFilterClick = (event) => {
+    currentFilter = event.target.dataset.filter;
+    updateDisplay();
+};
+
+const handleSortClick = (event) => {
+    currentSort = event.target.dataset.sort;
+    updateDisplay();
+};
+
+// Set up event listeners
+const setupEventListeners = () => {
+    filterButtons.forEach(button => {
+        button.addEventListener('click', handleFilterClick);
+    });
+
+    sortButtons.forEach(button => {
+        button.addEventListener('click', handleSortClick);
+    });
+};
+
 // Initialize app
-renderRecipes(recipes);
+setupEventListeners();
+updateDisplay();

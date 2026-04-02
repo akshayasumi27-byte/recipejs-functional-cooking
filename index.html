@@ -13,6 +13,22 @@
     </header>
 
     <main>
+        <section class="controls">
+            <div class="filter-buttons">
+                <button class="control-btn active" data-filter="all">Show All</button>
+                <button class="control-btn" data-filter="easy">Easy</button>
+                <button class="control-btn" data-filter="medium">Medium</button>
+                <button class="control-btn" data-filter="hard">Hard</button>
+                <button class="control-btn" data-filter="quick">Quick Recipes</button>
+            </div>
+
+            <div class="sort-buttons">
+                <button class="control-btn active" data-sort="none">Default Order</button>
+                <button class="control-btn" data-sort="name">Name (A-Z)</button>
+                <button class="control-btn" data-sort="time">Time (Fastest First)</button>
+            </div>
+        </section>
+
         <div id="recipe-container">
             <!-- Recipe cards will be rendered here by JavaScript -->
         </div>
