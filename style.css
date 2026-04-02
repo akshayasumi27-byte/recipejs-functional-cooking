@@ -38,6 +38,46 @@ main {
     padding: 0 1rem;
 }
 
+/* Controls */
+.controls {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.filter-buttons,
+.sort-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.control-btn {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 25px;
+    background-color: white;
+    color: #333;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+    background-color: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.control-btn.active {
+    background-color: #667eea;
+    color: white;
+}
+
 /* Recipe Container - Flexbox Grid */
 #recipe-container {
     display: flex;
